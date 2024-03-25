@@ -1,13 +1,12 @@
 <?php
 // required headers
-header("Access-Control-Allow-Origin: http://localhost/");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-include_once 'c:\Users\aramosm\Documents\TFG\Backend\config\database.php';
-include_once 'c:\Users\aramosm\Documents\TFG\Backend\api\objects\user.php';
+include_once 'C:\xampp\htdocs\TFG\Backend\api\objects\user.php';
+include_once 'C:\xampp\htdocs\TFG\Backend\config\database.php';
 $database = new Database();
 $db = $database->getConnection();
 $user = new User($db);
