@@ -9,22 +9,27 @@ class User {
     public $profile_pic;
 
     private $passregex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-@!$%*?&._])[A-Za-z\d\-@!$%*?&._]{8,30}$/";
-    private $checkUserQuery = "SELECT COUNT(*) as cnt FROM " . $this->tabe_name . " WHERE username = ?";
-    private $checkEmailQuery = "SELECT COUNT(*) as cnt FROM " . $this->tabe_name . " WHERE email = ?";
-    private $getUserBaseQuery = "SELECT * FROM " . $this->tabe_name;
 
     public function __construct($db){
         $this->conn = $db;
+        
+    }
+
+    private function checkPassword() {
+        return preg_match($this->passregex, $this->password);
     }
 
     function create() {
+        $checkUserQuery = "SELECT COUNT(*) as cnt FROM " . $this->tabe_name . " WHERE username = ?";
+        $checkEmailQuery = "SELECT COUNT(*) as cnt FROM " . $this->tabe_name . " WHERE email = ?";
+
         $this->username=htmlspecialchars(strip_tags($this->username));
         if (filter_var($this->username, FILTER_VALIDATE_EMAIL)) {
             http_response_code(406);
             echo "The username cannot be an email";
             exit();
         }
-        $stmt = $this->conn->prepare($this->checkUserQuery);
+        $stmt = $this->conn->prepare($checkUserQuery);
         $stmt->bindParam(1, $this->username);
         $stmt->execute();
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -41,7 +46,7 @@ class User {
             exit();
         }
         
-        $stmt = $this->conn->prepare($this->checkEmailQuery);
+        $stmt = $this->conn->prepare($checkEmailQuery);
         $stmt->bindParam(1, $this->email);
         $stmt->execute();
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -51,31 +56,32 @@ class User {
                 exit();
             }
         }
-        if (!preg_match($this->passregex, $this->password)) {
+        if (!$this->checkPassword()) {
             http_response_code(406);
             echo "Passwrod needs: ";//TODO change
             exit();
         } 
-        $this->password=crypt($this->password, "test");
-
+        $this->password=crypt($this->password, '$1$vaKLBGUrYKqH$');
         $createQuery = "INSERT INTO " . $this->tabe_name . "(username, email, hash)
         values (:username, :email, :hash)";
         $stmt = $this->conn->prepare($createQuery);
 
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':email', $this->email);
-        $stmt->bindParam(':hash', $this->password);//TODO change for envl
+        $stmt->bindParam(':hash', $this->password);//TODO change for env
         return $stmt->execute();
     }
 
     function getUser($login, $password) {
-        $query = $this->getUserBaseQuery;
+        $getUserBaseQuery = "SELECT * FROM " . $this->tabe_name;
+        
+        $query = $getUserBaseQuery;
         if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
             $this->email = $login;
-            $query += " WHERE email = '" . $this->email . "'";
+            $query = $query . " WHERE email = '" . $this->email . "'";
         } else {
             $this->username = $login;
-            $query += " WHERE username = '" . $this->email . "'";
+            $query = $query . " WHERE username = '" . $this->username . "'";   
         }
         $stmt = $this->conn->prepare( $query );
         $stmt->execute();
@@ -86,11 +92,25 @@ class User {
             $this->username = $row['username'];
             $this->email = $row['email'];
             $this->password = $row['hash'];
-            if ($this->password != crypt($this->password, "test")) {
-
+            if ($this->password == crypt($password, '$1$vaKLBGUrYKqH$')) {//TODO change for env
+                return true;
+            } else {
+                echo json_encode(array("message"=> "invalid password"));
             }
-        } else {
-            return false;
+        } 
+        return false;
+    }
+
+    public function update() {
+        $getUserBaseQuery = "UPDATE " . $this->tabe_name . " SET username = '$this->username', email='$this->email'";
+        if ($this->password) {
+            $getUserBaseQuery = $getUserBaseQuery . ", password='$this->password'";
         }
+        $getUserBaseQuery = $getUserBaseQuery . " WHERE ID = '$this->id'";
+        $stmt = $this->conn->prepare($getUserBaseQuery);
+        if($stmt->execute()){
+            return true;
+        }
+        return false;
     }
 }

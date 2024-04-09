@@ -1,10 +1,10 @@
 CREATE DATABASE codesnack DEFAULT CHARSET = utf8mb4 DEFAULT COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE `users` (
-    `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT (uuid()),
     `username` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL unique,
     `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-    `hash` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `hash` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
     `profile_pic` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `id_UNIQUE` (`id`)
@@ -12,7 +12,7 @@ CREATE TABLE `users` (
 ;
 
 CREATE TABLE `snippets` (
-    `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'UUID()',
+    `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT (uuid()),
     `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
     `code` text COLLATE utf8mb4_unicode_ci NOT NULL,
     `description` text COLLATE utf8mb4_unicode_ci,
