@@ -1,8 +1,16 @@
-const BASE_PATH_SITE = "/TFG/Frontend/";
-const BASE_PATH_API = "/TFG/Backend/api/";
-const BASE_URL = window.location.protocol + "//" + window.location.host;
-
 $('#register-button').on('click', function() {
+    register();
+});
+
+$('#register-form').keypress(function (e) {
+    var key = e.which;
+    if(key == 13)  // the enter key code
+    {
+        register();
+    }
+});
+
+function register() {
     let username = $('#username');
     let email = $('#email');
     let pass = $('#password');
@@ -59,8 +67,7 @@ $('#register-button').on('click', function() {
                         'password': pass.val(),
                     }),
                     success: function(data, text) {
-                        console.log(data.jwt);
-                        document.cookie = "token=" + data.jwt;
+                        setCookie('jwt', data.jwt, 7);
                         window.location.href = BASE_URL + BASE_PATH_SITE + 'index.php';
                     }
                 });
@@ -68,4 +75,4 @@ $('#register-button').on('click', function() {
             }
         );
     }
-});
+}

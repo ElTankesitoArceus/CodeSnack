@@ -2,7 +2,7 @@
 
 <body class="bg-gradient-to-br from-zinc-900 to-zinc-800 ">
     <div class="w-1/3 min-w-[40rem] flex h-full m-auto ">
-        <div class="grid-cols-1 h-fit m-auto p-10 rounded-lg gap-56 content-around border-[#8ccee6] border bg-gradient-to-bl from-slate-800 to-zinc-900 text-slate-100 shadow-lg shadow-slate-800/50 hover:shadow-teal-900/50 hover:border-[#189CCC] transition ease-in-out">
+        <div id="register-form" class="grid-cols-1 h-fit m-auto p-10 rounded-lg gap-56 content-around border-[#8ccee6] border bg-gradient-to-bl from-slate-800 to-zinc-900 text-slate-100 shadow-lg shadow-slate-800/50 hover:shadow-teal-900/50 hover:border-[#189CCC] transition ease-in-out">
             <h1 class="text-4xl font-bold mb-5 text-center ">Register account</h1>
             <div id="error-container" class="bg-red-400/[.7] rounded-md px-5 py-2" style="display: none;">sdf</div>
             <div class="grid-cols-1 m-auto">

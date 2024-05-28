@@ -1,8 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: ["./backend/**/*.{php, html, js}"],
+    content: ["./Frontend/*/*.{html,php}"],
     theme: {
-      extend: {},
+      extend: {
+        fontFamily: {
+          customFont: ['lexend-deca', "sans-serif"],
+          customFont: ['montserrat', "sans-serif"]
+        },
+      },
     },
     plugins: [],
   }

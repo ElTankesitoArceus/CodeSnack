@@ -8,3 +8,4 @@ $key = "example_key";//TODO change
 $issued_at = time();
 $expiration_time = $issued_at + (60 * 60); // valid for 1 hour
 $issuer = "CodeSnack";
+$cookie_name = 'jwt';

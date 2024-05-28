@@ -14,10 +14,12 @@ include_once '..\..\vendor\firebase\php-jwt\src\SignatureInvalidException.php';
 include_once '..\..\vendor\firebase\php-jwt\src\JWT.php';
 use \Firebase\JWT\JWT;
 
+$cookie_name = 'jwt';
 
 $database = new Database();
 $db = $database->getConnection();
 $user = new User($db);
+
 
 $data = json_decode(file_get_contents("php://input"));
 $data->login=htmlspecialchars(strip_tags($data->login));

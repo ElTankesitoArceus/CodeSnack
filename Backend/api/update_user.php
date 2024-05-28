@@ -18,6 +18,12 @@ include_once '..\..\vendor\firebase\php-jwt\src\JWT.php';
 
 use \Firebase\JWT\JWT;
 
+if(!isset($_COOKIE[$cookie_name])) {
+    echo "Cookie named '" . $cookie_name . "' is not set!";
+} else {
+    echo  $_COOKIE[$cookie_name];
+}  
+
 $database = new Database();
 $db = $database->getConnection();
 $user = new User($db);
